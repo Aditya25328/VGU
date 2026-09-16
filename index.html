@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digicampus | Vivekananda Global University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============================================================ -->
+  <!-- 1. GOOGLE ACCOUNT SELECTOR MODAL OVERLAY (Initial Video State) -->
+  <!-- ============================================================ -->
+  <div id="google-modal-overlay" class="google-modal-overlay active">
+    <div class="google-modal-card" id="google-modal-card">
+      <div class="google-logo-wrapper">
+        <svg viewBox="0 0 24 24" width="24" height="24" class="google-icon-svg">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+      </div>
+      
+      <h2 class="google-modal-title">Choose an account</h2>
+      <p class="google-modal-subtitle">to continue to <span class="highlight-domain">digicampus.com</span></p>
+
+      <div class="google-accounts-list" id="google-accounts-list">
+        <!-- The 3 students will be rendered dynamically by app.js -->
+      </div>
+
+      <div class="google-modal-disclaimer">
+        Before using this app, you can review digicampus.com's <a href="#" class="g-link">Privacy Policy</a> and <a href="#" class="g-link">Terms of Service</a>.
+      </div>
+
+      <div class="google-modal-footer">
+        <div class="lang-selector">
+          English (United States) 
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+        </div>
+        <div class="footer-legal-links">
+          <a href="#">Help</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 2. LOADING SPINNER OVERLAY ("One moment please...")          -->
+  <!-- ============================================================ -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loading-card">
+      <div class="spinner-circular">
+        <svg viewBox="0 0 50 50" class="spinner-svg">
+          <circle class="spinner-path" cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
+        </svg>
+      </div>
+      <p class="loading-text">One moment please...</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 3. TOAST NOTIFICATION ("✓ Sign in successful")              -->
+  <!-- ============================================================ -->
+  <div id="toast-container" class="toast-container">
+    <div class="toast-item success-toast" id="success-toast">
+      <div class="toast-icon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <span class="toast-message">Sign in successful</span>
+      <button class="toast-close" id="toast-close-btn" aria-label="Close notification">×</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 4. VGU LOGIN SCREEN (Fixed Logo Position & Backdrop)        -->
+  <!-- ============================================================ -->
+  <div id="login-screen" class="login-screen-view">
+    <div class="login-bg-overlay"></div>
+    
+    <div class="login-content-wrapper">
+      <!-- VGU Top Emblem and Welcome Title -->
+      <div class="login-header-branding">
+        <div class="vgu-round-emblem-container">
+          <div class="vgu-logo-emblem-circle">
+            <img src="assets/vgu_login_emblem.jpg" alt="Vivekananda Global University Emblem" class="vgu-emblem-img">
+          </div>
+        </div>
+        <h2 class="welcome-subtitle">WELCOME TO</h2>
+        <h1 class="university-main-title">Vivekananda Global University</h1>
+      </div>
+
+      <!-- Login Glass Cards Container -->
+      <div class="login-cards-grid">
+        <!-- Left: Sign in here Card -->
+        <div class="glass-card login-form-card">
+          <h3 class="card-title">Sign in here</h3>
+          <form id="traditional-login-form" onsubmit="handleTraditionalLogin(event)">
+            <div class="form-group">
+              <input 
+                type="text" 
+                id="login-user-input" 
+                class="login-input" 
+                placeholder="Registration id/email/phone no." 
+                value="aaryansingh2705@gmail.com"
+                required
+              >
+            </div>
+            
+            <div class="form-group password-group">
+              <input 
+                type="password" 
+                id="login-password-input" 
+                class="login-input" 
+                placeholder="Password" 
+                value="••••••••••••"
+                required
+              >
+              <button type="button" class="password-toggle-btn" id="password-toggle-btn" title="Toggle password visibility">
+                <svg id="eye-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Cloudflare Turnstile Verification Badge -->
+            <div class="cloudflare-turnstile-box">
+              <div class="turnstile-left">
+                <div class="turnstile-checkbox checked">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <span class="turnstile-label">Success!</span>
+              </div>
+              <div class="turnstile-right">
+                <div class="cloudflare-brand">
+                  <span class="cf-orange">CLOUDFLARE</span>
+                  <span class="cf-sub">TURNSTILE</span>
+                </div>
+                <div class="cf-terms">
+                  <a href="#">Privacy</a> • <a href="#">Terms</a>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary-red">Sign in</button>
+
+            <div class="login-card-links">
+              <a href="#" class="card-footer-link" onclick="triggerGooglePicker(); return false;">Switch Student Account</a>
+              <a href="#" class="card-footer-link">Need assistance? Get Help Here</a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right: Sign in with Google Card -->
+        <div class="glass-card login-oauth-card">
+          <h3 class="card-title">Sign in with</h3>
+          <div class="oauth-buttons-container">
+            <button class="google-oauth-circle-btn" id="login-google-btn" title="Sign in with Google" onclick="triggerGooglePicker()">
+              <svg viewBox="0 0 24 24" width="22" height="22">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer watermark -->
+      <div class="login-footer-branding">
+        <span>powered by <strong>Digi</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 5. MAIN ERP DASHBOARD SCREEN (Full Student Portal)           -->
+  <!-- ============================================================ -->
+  <div id="dashboard-screen" class="dashboard-screen-view">
+    
+    <!-- Top Global Header -->
+    <header class="vgu-header-bar">
+      <div class="header-left">
+        <a href="#" class="vgu-brand-link">
+          <div class="vgu-logo-box">
+            <span class="vgu-brand-text">VGU</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="header-center">
+        <div class="header-search-bar">
+          <input type="text" placeholder="Search Digicampus" id="global-search-input">
+          <button class="search-submit-btn" aria-label="Search">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Direct Quick Logout Button -->
+        <button class="header-logout-btn" id="btn-quick-logout" title="Logout & Return to Login" onclick="handleLogout()">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Logout</span>
+        </button>
+
+        <!-- Notification Bell with badge -->
+        <button class="header-icon-btn notif-btn" id="notif-btn" title="Notifications">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="notif-badge">1</span>
+        </button>
+
+        <!-- User Profile Dropdown in Header -->
+        <div class="header-user-menu" id="header-user-menu">
+          <img src="assets/aaryan_avatar.jpg" alt="Student Profile" class="header-avatar-img" id="header-avatar">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="dropdown-chevron">
+            <path d="M7 10l5 5 5-5z"/>
+          </svg>
+          
+          <div class="user-dropdown-popup" id="user-dropdown-popup">
+            <div class="dropdown-user-header">
+              <strong id="dropdown-user-name">AARYAN SINGH</strong>
+              <small id="dropdown-user-email">aaryansingh2705@gmail.com</small>
+            </div>
+            <hr>
+            <div class="dropdown-switch-title">Switch Student Profile:</div>
+            <button class="dropdown-item switch-user-opt" onclick="switchStudent(0)">👤 Aaryan Singh (53777)</button>
+            <button class="dropdown-item switch-user-opt" onclick="switchStudent(1)">👤 Ram Narayan Jat (53805)</button>
+            <button class="dropdown-item switch-user-opt" onclick="switchStudent(2)">👤 Sumit Kumar (53783)</button>
+            <hr>
+            <button class="dropdown-item logout-link" onclick="handleLogout()">
+              🚪 Logout (Back to Login)
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 3-Column Main Portal Body -->
+    <main class="dashboard-main-container">
+      
+      <!-- COLUMN 1: Left Navigation & Student Card -->
+      <aside class="dashboard-left-sidebar">
+        <!-- Student Identity Card -->
+        <div class="student-profile-card">
+          <div class="profile-card-banner"></div>
+          <div class="profile-avatar-wrapper">
+            <img src="assets/aaryan_avatar.jpg" alt="Student Photo" class="student-photo" id="sidebar-avatar">
+          </div>
+          <div class="student-details">
+            <h3 class="student-name" id="profile-name">AARYAN SINGH</h3>
+            <div class="student-id-row">
+              <span class="id-token" id="profile-id">53777</span>
+            </div>
+            <div class="student-roll-row">
+              <span class="roll-token" id="profile-roll">26TEC2MB377</span>
+            </div>
+            <div class="student-branch-row">
+              <span class="branch-name" id="profile-dept">MBA IN HUMAN RESOURCE MANAGEMENT</span>
+            </div>
+            <button class="add-headline-btn" id="add-headline-btn">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+              Add headline
+            </button>
+          </div>
+        </div>
+
+        <!-- Sidebar Navigation Menu -->
+        <nav class="sidebar-nav-menu">
+          <ul class="nav-links-list">
+            <li class="nav-item active" data-nav="home">
+              <a href="#home" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                  </svg>
+                </span>
+                <span class="nav-label">Home</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="profile">
+              <a href="#profile" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </span>
+                <span class="nav-label">Profile</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="result">
+              <a href="#result" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                </span>
+                <span class="nav-label">Result</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="classroom">
+              <a href="#classroom" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                  </svg>
+                </span>
+                <span class="nav-label">Classroom</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="course-reg">
+              <a href="#course-reg" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                  </svg>
+                </span>
+                <span class="nav-label">Course Registration</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="survey">
+              <a href="#survey" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path>
+                    <rect x="9" y="3" width="6" height="4" rx="2"></rect>
+                    <path d="M9 14l2 2 4-4"></path>
+                  </svg>
+                </span>
+                <span class="nav-label">Survey Management</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="phd">
+              <a href="#phd" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                  </svg>
+                </span>
+                <span class="nav-label">PhD Management</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="feedback">
+              <a href="#feedback" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                </span>
+                <span class="nav-label">Feedback</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="examinations">
+              <a href="#examinations" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                  </svg>
+                </span>
+                <span class="nav-label">Examinations</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="online-exam">
+              <a href="#online-exam" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </span>
+                <span class="nav-label">Online Exam</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="calendar">
+              <a href="#calendar" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </span>
+                <span class="nav-label">Event Calendar</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="placement">
+              <a href="#placement" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                  </svg>
+                </span>
+                <span class="nav-label">Placement</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="drive">
+              <a href="#drive" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                  </svg>
+                </span>
+                <span class="nav-label">Drive</span>
+              </a>
+            </li>
+
+            <li class="nav-item" data-nav="invoices">
+              <a href="#invoices" class="nav-link">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <line x1="6" y1="8" x2="10" y2="8"></line>
+                    <line x1="6" y1="12" x2="14" y2="12"></line>
+                  </svg>
+                </span>
+                <span class="nav-label">Invoices And Credit Notes</span>
+              </a>
+            </li>
+
+            <!-- Sidebar Logout Button -->
+            <li class="nav-item nav-logout-item">
+              <a href="#logout" class="nav-link logout-link-sidebar" onclick="handleLogout(); return false;">
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                </span>
+                <span class="nav-label logout-text">Logout</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- COLUMN 2: Center Main Content Feed -->
+      <section class="dashboard-center-feed">
+        
+        <!-- Admission Process Action Card -->
+        <div class="admission-banner-card">
+          <h2 class="admission-title">Admission Process</h2>
+          <div class="admission-buttons-row">
+            <button class="btn-banner-red" onclick="alert('Opening Admission Form...')">Fill admission form</button>
+            <button class="btn-banner-red" onclick="alert('Redirecting to fee payment gateway...')">Pay fee online</button>
+          </div>
+        </div>
+
+        <!-- Quick Post / Question / Event Bar -->
+        <div class="quick-action-bar">
+          <button class="quick-action-tab active" id="tab-post">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            <span>Post</span>
+          </button>
+          
+          <button class="quick-action-tab" id="tab-question">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>Ask question</span>
+          </button>
+          
+          <button class="quick-action-tab" id="tab-event">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+              <line x1="12" y1="14" x2="12" y2="18"></line>
+              <line x1="10" y1="16" x2="14" y2="16"></line>
+            </svg>
+            <span>Add event</span>
+          </button>
+        </div>
+
+        <!-- Feed Filter Row -->
+        <div class="feed-filters-bar">
+          <div class="filters-left">
+            <span class="filter-label">Show only</span>
+            <label class="custom-checkbox-label">
+              <input type="checkbox" id="chk-saved-posts">
+              <span class="checkbox-custom"></span>
+              <span class="label-text">Saved Posts</span>
+            </label>
+            <label class="custom-checkbox-label">
+              <input type="checkbox" id="chk-my-posts">
+              <span class="checkbox-custom"></span>
+              <span class="label-text">My Posts</span>
+            </label>
+          </div>
+          <div class="filters-right">
+            <div class="dropdown-select-wrapper">
+              <select class="filter-select" id="filter-category">
+                <option value="">Category</option>
+                <option value="events">Events</option>
+                <option value="academics">Academics</option>
+                <option value="clubs">Clubs</option>
+              </select>
+            </div>
+            <div class="dropdown-select-wrapper">
+              <select class="filter-select" id="filter-booth">
+                <option value="">Booth</option>
+                <option value="arogya">Arogya Club</option>
+                <option value="cse">CSE Department</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feed Posts Stream -->
+        <div class="posts-stream" id="posts-stream">
+          
+          <!-- Post 1: Arogya Club Fit & Fun Challenge -->
+          <article class="feed-post-card">
+            <div class="post-header">
+              <div class="post-author-badge green-badge">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="white">
+                  <path d="M4 10h16v10H4zM12 2L2 7h20z"/>
+                </svg>
+              </div>
+              <div class="post-header-meta">
+                <h4 class="post-author-name">VGU</h4>
+                <time class="post-timestamp">2 hrs</time>
+              </div>
+            </div>
+
+            <div class="post-body-content">
+              <p class="announcement-lead">Arogya Club Presents 🌿</p>
+              <h3 class="announcement-title">✨ FIT &amp; FUN CHALLENGE ✨</h3>
+              <p class="announcement-motto">Move • Play • Be Healthy 💪🌱</p>
+              <p class="announcement-desc">Ready to challenge yourself and have some fun? 🔥<br>
+              Join us for an exciting activity filled with energy, movement, fun and healthy vibes! 🏃‍♂️🏃‍♀️</p>
+
+              <div class="event-details-block">
+                <div class="event-meta-line">🗓️ <strong>Date:</strong> 15 September 2026</div>
+                <div class="event-meta-line">⏰ <strong>Time:</strong> 12:30 PM – 2:00 PM</div>
+                <div class="event-meta-line">📍 <strong>Venue:</strong> Tea Post, VGU Campus</div>
+              </div>
+
+              <p class="call-to-action-note">💚 Come with your friends, take the challenge, get active and make your day more fun!</p>
+
+              <div class="whatsapp-groups-section">
+                <div class="wa-group-item">
+                  <span class="wa-link-label">🔗 Join WhatsApp Group 1:</span>
+                  <div class="wa-sub">Join Group 1 Year</div>
+                  <a href="https://chat.whatsapp.com/KINffCGYqJc5ytFjixa7er?s=cl&p=a&mlu=0&ilr=4" target="_blank" rel="noopener noreferrer" class="wa-actual-link">
+                    https://chat.whatsapp.com/KINffCGYqJc5ytFjixa7er?s=cl&amp;p=a&amp;mlu=0&amp;ilr=4
+                  </a>
+                </div>
+
+                <div class="wa-group-item">
+                  <span class="wa-link-label">🔗 Join WhatsApp Group 2:</span>
+                  <div class="wa-sub">Join Group 2 Year</div>
+                  <a href="https://chat.whatsapp.com/invite/sample" target="_blank" rel="noopener noreferrer" class="wa-actual-link">
+                    https://chat.whatsapp.com/invite/vgu-arogya-club-2026
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- COLUMN 3: Right Sidebar (Verification & Classes) -->
+      <aside class="dashboard-right-sidebar">
+        
+        <!-- Pending Verification Widget -->
+        <div class="widget-card verification-widget">
+          <h3 class="widget-heading">Pending Verification</h3>
+          <h4 class="sub-heading-red">Email Verification</h4>
+          <p class="widget-text-sub">Email address not verified, Please verify</p>
+          
+          <div class="verify-action-row">
+            <button class="btn-verify-pill" id="btn-verify-email" onclick="handleVerifyEmail()">Verify</button>
+          </div>
+
+          <div class="widget-warning-box">
+            <span class="warning-icon">⚠️</span>
+            <span class="warning-text">By not verifying the email, you'll not receive any emails from Classroom, Placements etc</span>
+          </div>
+        </div>
+
+        <!-- Divider with label: TODAY -->
+        <div class="section-date-divider">
+          <span class="divider-line"></span>
+          <span class="divider-text">TODAY</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <!-- Today Classes Widget -->
+        <div class="widget-card classes-schedule-widget">
+          <div class="widget-header-row">
+            <div class="classes-title-with-icon">
+              <span class="classes-text">Classes</span>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="schedule-icon">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+            </div>
+            <a href="#all-classes" class="view-all-link">View All</a>
+          </div>
+
+          <!-- Class item 1 -->
+          <div class="class-item-card">
+            <h4 class="class-subject-title" id="class-subject">Strategic Human Resource Management [MBAHR201]</h4>
+            
+            <div class="class-info-grid">
+              <div class="info-row">
+                <span class="info-label">Time :</span>
+                <span class="info-val">1:00 PM - 1:50 PM</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Type :</span>
+                <span class="info-val">Lecture &amp; Case Study</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Faculty :</span>
+                <span class="info-val">Dr. Sharma</span>
+              </div>
+              <div class="info-row align-top">
+                <span class="info-label">Venue :</span>
+                <span class="info-val">
+                  <div>ACB-304</div>
+                  <div class="sub-venue-text">Management Block</div>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider with label: TOMORROW -->
+        <div class="section-date-divider">
+          <span class="divider-line"></span>
+          <span class="divider-text">TOMORROW</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <!-- Tomorrow Schedule Preview -->
+        <div class="widget-card classes-schedule-widget subtle-tomorrow">
+          <div class="widget-header-row">
+            <div class="classes-title-with-icon">
+              <span class="classes-text">Classes</span>
+            </div>
+            <a href="#all-classes" class="view-all-link">View All</a>
+          </div>
+          <div class="class-item-card">
+            <h4 class="class-subject-title">Organizational Behaviour &amp; Talent Acquisition [MBAHR202]</h4>
+            <div class="class-info-grid">
+              <div class="info-row">
+                <span class="info-label">Time :</span>
+                <span class="info-val">10:00 AM - 10:55 AM</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Venue :</span>
+                <span class="info-val">ACB-302 Management Block</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </main>
+  </div>
+
+  <!-- Script logic -->
+  <script src="app.js"></script>
+</body>
+</html>
