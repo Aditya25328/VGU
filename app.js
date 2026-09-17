@@ -14,7 +14,7 @@ const STUDENTS_DATABASE = [
   {
     id: "53777",
     name: "AARYAN SINGH",
-    rollNumber: "26TEC2MB377",
+    rollNumber: "26MGT2MB377",
     applicationNo: "VGU_2026_18_577745",
     email: "aaryansingh2705@gmail.com",
     department: "MBA IN HUMAN RESOURCE MANAGEMENT",
@@ -41,7 +41,7 @@ const STUDENTS_DATABASE = [
   {
     id: "53805",
     name: "RAM NARAYAN JAT",
-    rollNumber: "26TEC2MB380",
+    rollNumber: "26MGT2MB380",
     applicationNo: "VGU_2026_18_577747",
     email: "ramnarayanjat6384@gmail.com",
     department: "MBA IN HUMAN RESOURCE MANAGEMENT",
@@ -68,7 +68,7 @@ const STUDENTS_DATABASE = [
   {
     id: "53783",
     name: "SUMIT KUMAR",
-    rollNumber: "26TEC2MB383",
+    rollNumber: "26MGT2MB383",
     applicationNo: "VGU_2026_18_577749",
     email: "jsu49448@gmail.com",
     department: "MBA IN HUMAN RESOURCE MANAGEMENT",
